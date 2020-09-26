@@ -4,14 +4,21 @@ using UnityEngine;
 
 public class SphereCharacter : MonoBehaviour
 {
+    //Other Charater
     SphereCharacter otherSphereCharacter;
 
+    //Own attribute
+    [SerializeField] [Range(0, 10)] float speed = 1f;
     Renderer sphereRenderer;
     Color randomColor;
+    Vector3 originPosition;
+    float distanceBetweenCharacter;
+    bool isWait = false;
 
     void Start()
     {
         sphereRenderer = GetComponent<Renderer>();
+        originPosition = transform.position;
 
         GenerateRandomColor();
     }
@@ -21,6 +28,8 @@ public class SphereCharacter : MonoBehaviour
         FindOtherSphereCharacter();
 
         CheckSameColor();
+
+        SwappingPosition();
     }
 
     void FindOtherSphereCharacter()
@@ -64,5 +73,28 @@ public class SphereCharacter : MonoBehaviour
         {
             GenerateRandomColor();
         }
+    }
+
+    void SwappingPosition()
+    {
+        distanceBetweenCharacter = Vector3.Distance(otherSphereCharacter.originPosition, transform.position);
+
+        if (isWait) { return; }
+
+        transform.position = Vector3.Lerp(transform.position, otherSphereCharacter.originPosition, Time.deltaTime * speed);
+
+        if (distanceBetweenCharacter < 0.03f)
+        {
+            isWait = true;
+            transform.position = otherSphereCharacter.originPosition;
+            StartCoroutine(WaitForNewSwapping());
+        }
+    }
+
+    IEnumerator WaitForNewSwapping()
+    {
+        yield return new WaitForSeconds(2f);
+        originPosition = transform.position;
+        isWait = false;
     }
 }
