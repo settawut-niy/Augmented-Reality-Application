@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SphereCharacter : MonoBehaviour
 {
-    //Other Charater
+    //Other Sphere Character
     SphereCharacter otherSphereCharacter;
 
     //Own attribute

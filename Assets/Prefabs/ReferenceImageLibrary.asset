@@ -25,3 +25,13 @@ MonoBehaviour:
     m_SpecifySize: 1
     m_Name: AR-ImageTarget-I
     m_Texture: {fileID: 2800000, guid: af9dcaf1eda1d1a4ca8cda2a97d0d1cf, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5180353521659069833
+      m_GuidHigh: 9453389904217919912
+    m_SerializedTextureGuid:
+      m_GuidLow: 3230341300350388643
+      m_GuidHigh: 12008374117670246248
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: AR-ImageTarget-II
+    m_Texture: {fileID: 2800000, guid: 2ea889a37a4c2cd468d7ba0da350a6a6, type: 3}
