@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class SphereCharacter : MonoBehaviour
 {
+    // Temporary : For Test - todo delete
+    TrackedImageOperator _TrackedImageOperator;
+
     //Other Sphere Character in scene
     SphereCharacter otherSphereCharacter;
 
@@ -13,10 +16,13 @@ public class SphereCharacter : MonoBehaviour
 
     //Own attribute
     Renderer sphereRenderer;
+    Color[] colorPalette = { Color.white, Color.black, Color.red, Color.green, Color.blue, Color.yellow, Color.cyan, Color.magenta };
     Color randomColor;
     float distanceToTrackedImage;
     float movementSpeed = 1f;
+    public bool isSwapping = false;
     bool isWaitForSwapping = false;
+    float count = 0;
 
     public Vector3 OwnTrackedImagePosition
     {
@@ -27,15 +33,13 @@ public class SphereCharacter : MonoBehaviour
     void Awake()
     {
         sphereRenderer = GetComponent<Renderer>();
-    }
-
-    void Start()
-    {
-        GenerateRandomColor();
+        // Temporary : For Test - todo delete
+        _TrackedImageOperator = FindObjectOfType<TrackedImageOperator>();
     }
 
     void OnEnable()
     {
+        GenerateRandomColor();
         isSetTrackedImagePosition = false;
         isWaitForSwapping = false;
     }
@@ -69,13 +73,12 @@ public class SphereCharacter : MonoBehaviour
                 }
             }
         }
-
-        print("I'm " + name + " and going to" + otherSphereCharacter.name);
     }
 
     void GenerateRandomColor()
     {
-        randomColor = Random.ColorHSV();
+        //randomedColor = Random.ColorHSV();
+        randomColor = colorPalette[Random.Range(0, 7)];
 
         sphereRenderer.material.color = randomColor;
     }
@@ -92,6 +95,12 @@ public class SphereCharacter : MonoBehaviour
 
     public void PositionBehavior ()
     {
+        // Temporary : For Test - todo delete
+        _TrackedImageOperator.d_Info1 = m_OwnTrackedImagePosition.ToString();
+
+        // Temporary : For Test - todo delete
+        _TrackedImageOperator.d_Info3 = count;
+
         SetPosition();
 
         SwappingPosition();
@@ -99,13 +108,30 @@ public class SphereCharacter : MonoBehaviour
 
     void SetPosition ()
     {
+        //if (!otherSphereCharacter.gameObject.activeInHierarchy) { isSetTrackedImagePosition = false; }
+
         if (isSetTrackedImagePosition) { return; }
+
         transform.position = m_OwnTrackedImagePosition;
-        isSetTrackedImagePosition = true;
+
+        if (transform.position == m_OwnTrackedImagePosition)
+        {
+            count += Time.deltaTime;
+        }
+
+        if (count > 2f)
+        {
+            isSetTrackedImagePosition = true;
+            count = 0f;
+        }
     }
 
     void SwappingPosition()
     {
+        if (!otherSphereCharacter.gameObject.activeInHierarchy) { return; }
+
+        isSwapping = true;
+
         distanceToTrackedImage = Vector3.Distance(otherSphereCharacter.OwnTrackedImagePosition, transform.position);
 
         if (isWaitForSwapping) { return; }

@@ -24,8 +24,9 @@ public class TrackedImageOperator : MonoBehaviour
     int d_added;
     int d_updated;
     int d_removed;
-    string d_name;
-    bool d_active;
+    public string d_Info1;
+    public int d_Info2;
+    public float d_Info3;
 
     void Awake()
     {
@@ -49,7 +50,9 @@ public class TrackedImageOperator : MonoBehaviour
             "Added: " + d_added + "\n" +
             "Updated: " + d_updated + "\n"+
             "Removed: " + d_removed + "\n" +
-            "Tracked Active: " + d_name + " " + d_active
+            "Debug1: " + d_Info1 + "\n" +
+            "Debug2: " + d_Info2 + "\n" +
+            "Debug3: " + d_Info3
             ;
     }
 
@@ -85,8 +88,6 @@ public class TrackedImageOperator : MonoBehaviour
 
             // todo delete
             d_updated++;
-            d_name = trackedImage.referenceImage.name;
-            d_active = trackedImage.gameObject.activeInHierarchy;
         }
 
         foreach (ARTrackedImage trackedImage in eventArgs.removed)
@@ -114,12 +115,13 @@ public class TrackedImageOperator : MonoBehaviour
     void SpawnARObject(string name, Vector3 position)
     {
         collectedARObjects[name].SetActive(true);
-        collectedARObjects[name].GetComponent<SphereCharacter>().OwnTrackedImagePosition.Set(position.x, position.y, position.z);
+        collectedARObjects[name].GetComponent<SphereCharacter>().OwnTrackedImagePosition = position;
         collectedARObjects[name].GetComponent<SphereCharacter>().PositionBehavior();
     }
 
     void DespawnARObject(string name)
     {
+        collectedARObjects[name].GetComponent<SphereCharacter>().isSwapping = false;
         collectedARObjects[name].SetActive(false);
     }
 }
