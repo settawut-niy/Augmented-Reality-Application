@@ -4,23 +4,40 @@ using UnityEngine;
 
 public class SphereCharacter : MonoBehaviour
 {
-    //Other Sphere Character
+    //Other Sphere Character in scene
     SphereCharacter otherSphereCharacter;
 
+    //About tracked image
+    Vector3 m_OwnTrackedImagePosition;
+    bool isSetTrackedImagePosition = false;
+
     //Own attribute
-    [SerializeField] [Range(0, 10)] float speed = 1f;
     Renderer sphereRenderer;
     Color randomColor;
-    Vector3 originPosition;
-    float distanceBetweenCharacter;
-    bool isWait = false;
+    float distanceToTrackedImage;
+    float movementSpeed = 1f;
+    bool isWaitForSwapping = false;
+
+    public Vector3 OwnTrackedImagePosition
+    {
+        get { return m_OwnTrackedImagePosition; }
+        set { m_OwnTrackedImagePosition = value; }
+    }
+
+    void Awake()
+    {
+        sphereRenderer = GetComponent<Renderer>();
+    }
 
     void Start()
     {
-        sphereRenderer = GetComponent<Renderer>();
-        originPosition = transform.position;
-
         GenerateRandomColor();
+    }
+
+    void OnEnable()
+    {
+        isSetTrackedImagePosition = false;
+        isWaitForSwapping = false;
     }
 
     void Update()
@@ -28,8 +45,6 @@ public class SphereCharacter : MonoBehaviour
         FindOtherSphereCharacter();
 
         CheckSameColor();
-
-        SwappingPosition();
     }
 
     void FindOtherSphereCharacter()
@@ -75,18 +90,32 @@ public class SphereCharacter : MonoBehaviour
         }
     }
 
+    public void PositionBehavior ()
+    {
+        SetPosition();
+
+        SwappingPosition();
+    }
+
+    void SetPosition ()
+    {
+        if (isSetTrackedImagePosition) { return; }
+        transform.position = m_OwnTrackedImagePosition;
+        isSetTrackedImagePosition = true;
+    }
+
     void SwappingPosition()
     {
-        distanceBetweenCharacter = Vector3.Distance(otherSphereCharacter.originPosition, transform.position);
+        distanceToTrackedImage = Vector3.Distance(otherSphereCharacter.OwnTrackedImagePosition, transform.position);
 
-        if (isWait) { return; }
+        if (isWaitForSwapping) { return; }
 
-        transform.position = Vector3.Lerp(transform.position, otherSphereCharacter.originPosition, Time.deltaTime * speed);
+        transform.position = Vector3.Lerp(transform.position, otherSphereCharacter.OwnTrackedImagePosition, Time.deltaTime * movementSpeed);
 
-        if (distanceBetweenCharacter < 0.03f)
+        if (distanceToTrackedImage < 0.03f)
         {
-            isWait = true;
-            transform.position = otherSphereCharacter.originPosition;
+            isWaitForSwapping = true;
+            transform.position = otherSphereCharacter.OwnTrackedImagePosition;
             StartCoroutine(WaitForNewSwapping());
         }
     }
@@ -94,7 +123,7 @@ public class SphereCharacter : MonoBehaviour
     IEnumerator WaitForNewSwapping()
     {
         yield return new WaitForSeconds(2f);
-        originPosition = transform.position;
-        isWait = false;
+        isSetTrackedImagePosition = false;
+        isWaitForSwapping = false;
     }
 }
