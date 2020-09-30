@@ -1,0 +1,37 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 848409ee8ba454f42a5ddff137688a27, type: 3}
+  m_Name: ReferenceImageLibrary
+  m_EditorClassIdentifier: 
+  m_GuidLow: 4951885831029058512
+  m_GuidHigh: 15343478387147466427
+  m_Images:
+  - m_SerializedGuid:
+      m_GuidLow: 5045777207675142960
+      m_GuidHigh: 5758893246964157596
+    m_SerializedTextureGuid:
+      m_GuidLow: 15106460328799357681
+      m_GuidHigh: 14974979583661214922
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Sphere Object A
+    m_Texture: {fileID: 2800000, guid: af9dcaf1eda1d1a4ca8cda2a97d0d1cf, type: 3}
+  - m_SerializedGuid:
+      m_GuidLow: 5686176749817535444
+      m_GuidHigh: 17589842425206050194
+    m_SerializedTextureGuid:
+      m_GuidLow: 3230341300350388643
+      m_GuidHigh: 12008374117670246248
+    m_Size: {x: 0.1, y: 0.1}
+    m_SpecifySize: 1
+    m_Name: Sphere Object B
+    m_Texture: {fileID: 2800000, guid: 2ea889a37a4c2cd468d7ba0da350a6a6, type: 3}
