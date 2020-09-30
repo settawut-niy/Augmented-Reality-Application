@@ -4,10 +4,6 @@ using UnityEngine;
 
 public class SphereCharacter : MonoBehaviour
 {
-    // Temporary : For Test - todo delete <
-    TrackedImageOperator _TrackedImageOperator;
-    // Temporary : For Test - todo delete >
-
     //Other Sphere Character in scene
     SphereCharacter otherSphereCharacter;
 
@@ -24,17 +20,14 @@ public class SphereCharacter : MonoBehaviour
     Renderer sphereRenderer;
     Color[] colorPalette = { Color.white, Color.black, Color.red, Color.green, Color.blue, Color.yellow, Color.cyan, Color.magenta };
     Color randomColor;
+
     float distanceToTrackedImage;
     float movementSpeed = 1f;
-
     bool isWaitForSwapping = false;
 
     void Awake()
     {
         sphereRenderer = GetComponent<Renderer>();
-        // Temporary : For Test - todo delete
-        _TrackedImageOperator = FindObjectOfType<TrackedImageOperator>();
-        // Temporary : For Test - todo delete
     }
 
     void OnEnable()
@@ -93,10 +86,6 @@ public class SphereCharacter : MonoBehaviour
 
     public void PositionBehavior (bool isSwap)
     {
-        // Temporary : For Test - todo delete <
-        _TrackedImageOperator.d_Info1 = m_OwnTrackedImagePosition.ToString();
-        // Temporary : For Test - todo delete >
-
         SetPosition(isSwap);
 
         SwappingPosition(isSwap);

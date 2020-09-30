@@ -17,29 +17,16 @@ public class TrackedImageOperator : MonoBehaviour
     // Place that keep ready to use (spawn) object
     Dictionary<string, GameObject> collectedARObjects = new Dictionary<string, GameObject>();
 
-    // Use to confirm swaping
+    // Control swaping
     [SerializeField] Toggle toggle_AutoSwap;
     [SerializeField] Toggle toggle_ConfirmSwap;
     [SerializeField] Text text_CountingSwap;
     bool isConfirmSwap = false;
     bool isAutoSwap = true;
-    bool hasObjectA = false;
-    bool hasObjectB = false;
 
+    // UI setting Control
     [SerializeField] Button button_SettingControl;
     [SerializeField] RectTransform ui_Setting;
-
-    // Temporary : For Test - todo delete <
-    [SerializeField] Text debugText;
-    int d_onEnable;
-    int d_onDisable;
-    int d_added;
-    int d_updated;
-    int d_removed;
-    public string d_Info1;
-    bool d_Info2;
-    bool d_Info3;
-    // Temporary : For Test - todo delete >
 
     void Awake()
     {
@@ -54,38 +41,14 @@ public class TrackedImageOperator : MonoBehaviour
         }
     }
 
-    // Temporary : For Test - todo delete <
-    void Update()
-    {
-        debugText.text =
-            "OnEnable: " + d_onEnable + "\n" +
-            "OnDisable: " + d_onDisable + "\n" +
-            "Added: " + d_added + "\n" +
-            "Updated: " + d_updated + "\n"+
-            "Removed: " + d_removed + "\n" +
-            "Debug1: " + d_Info1 + "\n" +
-            "Debug2: " + d_Info2 + "\n" +
-            "Debug3: " + d_Info3
-            ;
-    }
-    // Temporary : For Test - todo delete >
-
     void OnEnable()
     {
         trackedImageManager.trackedImagesChanged += TrackedImageChanged;
-
-        // todo delete <
-        d_onEnable++;
-        // todo delete >
     }
 
     void OnDisable()
     {
         trackedImageManager.trackedImagesChanged -= TrackedImageChanged;
-
-        // todo delete <
-        d_onDisable++;
-        // todo delete >
     }
 
     void TrackedImageChanged(ARTrackedImagesChangedEventArgs eventArgs)
@@ -93,29 +56,17 @@ public class TrackedImageOperator : MonoBehaviour
         foreach (ARTrackedImage trackedImage in eventArgs.added)
         {
             UpdateImage(trackedImage);
-
-            // todo delete <
-            d_added++;
-            // todo delete >
         }
 
         foreach (ARTrackedImage trackedImage in eventArgs.updated)
         {
             UpdateImage(trackedImage);
-
-            // todo delete <
-            d_updated++;
-            // todo delete >
         }
 
         foreach (ARTrackedImage trackedImage in eventArgs.removed)
         {
             // I change from trackedImage.name to trackedImage.referenceImage.name
             collectedARObjects[trackedImage.referenceImage.name].SetActive(false);
-
-            // todo delete <
-            d_removed++;
-            // todo delete >
         }
     }
 
@@ -159,7 +110,7 @@ public class TrackedImageOperator : MonoBehaviour
         {
             if (isAutoSwap)
             {
-                toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "Auto";
+                toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "     Swap Toggle: Auto";
                 if (!toggle_ConfirmSwap.isOn)
                 StartCoroutine(AutoSwap());
             }
@@ -168,11 +119,6 @@ public class TrackedImageOperator : MonoBehaviour
         {
             toggle_ConfirmSwap.isOn = false;
         }
-
-        // todo delete <
-        d_Info2 = hasObjectA;
-        d_Info3 = hasObjectB;
-        // todo delete >
     }
 
     IEnumerator AutoSwap()
@@ -243,7 +189,7 @@ public class TrackedImageOperator : MonoBehaviour
         {
             ui_Setting.gameObject.SetActive(false);
             button_SettingControl.GetComponentInChildren<Text>().text = "≡";
-            button_SettingControl.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
+            button_SettingControl.GetComponent<RectTransform>().anchoredPosition = new Vector2(-25f, -25f);
         }
         else
         {
