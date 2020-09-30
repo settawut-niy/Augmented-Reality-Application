@@ -18,10 +18,16 @@ public class TrackedImageOperator : MonoBehaviour
     Dictionary<string, GameObject> collectedARObjects = new Dictionary<string, GameObject>();
 
     // Use to confirm swaping
+    [SerializeField] Toggle toggle_AutoSwap;
     [SerializeField] Toggle toggle_ConfirmSwap;
+    [SerializeField] Text text_CountingSwap;
     bool isConfirmSwap = false;
+    bool isAutoSwap = true;
     bool hasObjectA = false;
     bool hasObjectB = false;
+
+    [SerializeField] Button button_SettingControl;
+    [SerializeField] RectTransform ui_Setting;
 
     // Temporary : For Test - todo delete <
     [SerializeField] Text debugText;
@@ -151,14 +157,16 @@ public class TrackedImageOperator : MonoBehaviour
 
         if (hasObjectA && hasObjectB)
         {
-            toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "Swap Now!";
-            toggle_ConfirmSwap.interactable = true;
+            if (isAutoSwap)
+            {
+                toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "Auto";
+                if (!toggle_ConfirmSwap.isOn)
+                StartCoroutine(AutoSwap());
+            }
         }
         else
         {
-            toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "Can't Swap";
             toggle_ConfirmSwap.isOn = false;
-            toggle_ConfirmSwap.interactable = false;
         }
 
         // todo delete <
@@ -167,7 +175,36 @@ public class TrackedImageOperator : MonoBehaviour
         // todo delete >
     }
 
-    public void ConfirmSwap ()
+    IEnumerator AutoSwap()
+    {
+        isAutoSwap = false;
+        ChangeCountingText("2");
+        yield return new WaitForSeconds(1);
+        ChangeCountingText("1");
+        yield return new WaitForSeconds(1);
+        toggle_ConfirmSwap.isOn = true;
+        ChangeCountingText("Swap!");
+        yield return new WaitForSeconds(1);
+        ChangeCountingText("");
+    }
+
+    void ChangeCountingText(string text)
+    {
+        if (text != null)
+        {
+            if (!text_CountingSwap.enabled)
+            {
+                text_CountingSwap.enabled = true;
+            }
+            text_CountingSwap.text = text;
+        }
+        else
+        {
+            text_CountingSwap.enabled = false;
+        }
+    }
+
+    public void ToggleConfirmSwap()
     {
         if (!isConfirmSwap)
         {
@@ -176,6 +213,43 @@ public class TrackedImageOperator : MonoBehaviour
         else
         {
             isConfirmSwap = false;
+
+            if (toggle_AutoSwap.isOn)
+            {
+                isAutoSwap = true;
+            }
+        }
+    }
+
+    public void ToggleAutoSwap()
+    {
+        if (toggle_AutoSwap.isOn)
+        {
+            isAutoSwap = true;
+            toggle_ConfirmSwap.interactable = false;
+            toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "     Swap Toggle: Auto";
+        }
+        else
+        {
+            isAutoSwap = false;
+            toggle_ConfirmSwap.interactable = true;
+            toggle_ConfirmSwap.GetComponentInChildren<Text>().text = "     Swap Toggle: Manual";
+        }
+    }
+
+    public void UISettingControl()
+    {
+        if (ui_Setting.gameObject.activeSelf)
+        {
+            ui_Setting.gameObject.SetActive(false);
+            button_SettingControl.GetComponentInChildren<Text>().text = "≡";
+            button_SettingControl.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, 0f);
+        }
+        else
+        {
+            ui_Setting.gameObject.SetActive(true);
+            button_SettingControl.GetComponentInChildren<Text>().text = "▲";
+            button_SettingControl.GetComponent<RectTransform>().anchoredPosition = new Vector2(0f, -170f);
         }
     }
 }
